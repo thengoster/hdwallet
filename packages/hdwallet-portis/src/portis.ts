@@ -39,7 +39,7 @@ export class PortisHDWallet implements core.HDWallet, core.ETHWallet, core.BTCWa
   ethAddress?: string;
 
   // used as a mutex to ensure calls to portis.getExtendedPublicKey cannot happen before a previous call has resolved
-  portisCallInProgress: Promise<any> = Promise.resolve();
+  protected portisCallInProgress: Promise<void> = Promise.resolve();
 
   constructor(portis: Portis) {
     this.portis = portis;
@@ -70,10 +70,9 @@ export class PortisHDWallet implements core.HDWallet, core.ETHWallet, core.BTCWa
     return "Portis";
   }
 
-  public initialize(): Promise<any> {
+  public async initialize(): Promise<void> {
     // no means to reset the state of the Portis widget
     // while it's in the middle of execution
-    return Promise.resolve();
   }
 
   public hasOnDevicePinEntry(): boolean {
@@ -108,47 +107,39 @@ export class PortisHDWallet implements core.HDWallet, core.ETHWallet, core.BTCWa
     await this.portis.logout();
   }
 
-  public ping(msg: core.Ping): Promise<core.Pong> {
+  public async ping(msg: core.Ping): Promise<core.Pong> {
     // no ping function for Portis, so just returning Core.Pong
-    return Promise.resolve({ msg: msg.msg });
+    return { msg: msg.msg };
   }
 
-  public sendPin(pin: string): Promise<void> {
+  public async sendPin(pin: string): Promise<void> {
     // no concept of pin in Portis
-    return Promise.resolve();
   }
 
-  public sendPassphrase(passphrase: string): Promise<void> {
+  public async sendPassphrase(passphrase: string): Promise<void> {
     // cannot send passphrase to Portis. Could show the widget?
-    return Promise.resolve();
   }
 
-  public sendCharacter(charater: string): Promise<void> {
+  public async sendCharacter(charater: string): Promise<void> {
     // no concept of sendCharacter in Portis
-    return Promise.resolve();
   }
 
-  public sendWord(word: string): Promise<void> {
+  public async sendWord(word: string): Promise<void> {
     // no concept of sendWord in Portis
-    return Promise.resolve();
   }
 
-  public cancel(): Promise<void> {
+  public async cancel(): Promise<void> {
     // no concept of cancel in Portis
-    return Promise.resolve();
   }
 
-  public wipe(): Promise<void> {
-    return Promise.resolve();
+  public async wipe(): Promise<void> {
   }
 
-  public reset(msg: core.ResetDevice): Promise<void> {
-    return Promise.resolve();
+  public async reset(msg: core.ResetDevice): Promise<void> {
   }
 
-  public recover(msg: core.RecoverDevice): Promise<void> {
+  public async recover(msg: core.RecoverDevice): Promise<void> {
     // no concept of recover in Portis
-    return Promise.resolve();
   }
 
   public loadDevice(msg: core.LoadDevice): Promise<void> {
@@ -161,12 +152,7 @@ export class PortisHDWallet implements core.HDWallet, core.ETHWallet, core.BTCWa
 
   public async getPublicKeys(msg: Array<core.GetPublicKey>): Promise<Array<core.PublicKey | null>> {
     const publicKeys: { xpub: string }[] = [];
-    this.portisCallInProgress = new Promise(async (resolve, reject) => {
-      try {
-        await this.portisCallInProgress;
-      } catch (e) {
-        console.error(e);
-      }
+    const out = this.portisCallInProgress.then(async () => {
       for (let i = 0; i < msg.length; i++) {
         const { addressNList, coin } = msg[i];
         const bitcoinSlip44 = 0x80000000 + core.slip44ByCoin("Bitcoin");
@@ -176,20 +162,20 @@ export class PortisHDWallet implements core.HDWallet, core.ETHWallet, core.BTCWa
           addressNList[1] === bitcoinSlip44 ? "Bitcoin" : ""
         );
         const { result, error } = portisResult;
-        if (error) reject(error);
+        if (error) throw error;
         publicKeys.push({ xpub: result });
       }
-      resolve(publicKeys);
+      return publicKeys
     });
-    return this.portisCallInProgress;
+    this.portisCallInProgress = out.then(() => {});
+    return out;
   }
 
   public async isInitialized(): Promise<boolean> {
     return true;
   }
 
-  public disconnect(): Promise<void> {
-    return Promise.resolve();
+  public async disconnect(): Promise<void> {
   }
 
   public async btcGetAddress(msg: core.BTCGetAddress): Promise<string> {
@@ -355,7 +341,7 @@ export class PortisHDWalletInfo implements core.HDWalletInfo, core.ETHWalletInfo
   }
 
   public async btcSupportsSecureTransfer(): Promise<boolean> {
-    return Promise.resolve(false);
+    return false;
   }
 
   public btcSupportsNativeShapeShift(): boolean {
