@@ -148,7 +148,7 @@ export enum ETHAddressDerivationScheme {
   Ledger = "ledger"
 }
 
-export function describeETHPath(path: BIP32Path, addressDerivationScheme = ETHAddressDerivationScheme.BIP44): PathDescription {
+export function ethDescribePath(path: BIP32Path, addressDerivationScheme = ETHAddressDerivationScheme.BIP44): PathDescription {
   let pathStr = addressNListToBIP32(path);
   let unknown: PathDescription = {
     verbose: pathStr,

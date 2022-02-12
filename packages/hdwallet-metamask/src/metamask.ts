@@ -297,12 +297,7 @@ export class MetaMaskHDWalletInfo implements core.HDWalletInfo, core.ETHWalletIn
   }
 
   public describePath(msg: core.DescribePath): core.PathDescription {
-    switch (msg.coin) {
-      case "Ethereum":
-        return core.describeETHPath(msg.path);
-      default:
-        throw new Error("Unsupported path");
-    }
+    return core.describePath(msg);
   }
 
   public ethNextAccountPath(msg: core.ETHAccountPath): core.ETHAccountPath | undefined {

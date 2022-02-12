@@ -135,24 +135,11 @@ export class KeepKeyHDWalletInfo
   }
 
   public describePath(msg: core.DescribePath): core.PathDescription {
-    switch (msg.coin) {
-      case "Ethereum":
-        return core.describeETHPath(msg.path);
-      case "Atom":
-        return core.cosmosDescribePath(msg.path);
-      case "Binance":
-        return core.binanceDescribePath(msg.path);
-      case "Ripple":
-        return core.rippleDescribePath(msg.path);
-      case "Eos":
-        return core.eosDescribePath(msg.path);
-      default:
-        return core.describeUTXOPath(msg.path, msg.coin, msg.scriptType);
-    }
+    return core.describePath(msg)
   }
 
   public btcNextAccountPath(msg: core.BTCAccountPath): core.BTCAccountPath | undefined {
-    let description = core.describeUTXOPath(msg.addressNList, msg.coin, msg.scriptType);
+    let description = core.btcDescribePath(msg.addressNList, msg.coin, msg.scriptType);
     if (!description.isKnown) {
       return undefined;
     }
@@ -176,7 +163,7 @@ export class KeepKeyHDWalletInfo
 
   public ethNextAccountPath(msg: core.ETHAccountPath): core.ETHAccountPath | undefined {
     let addressNList = msg.hardenedPath.concat(msg.relPath);
-    let description = core.describeETHPath(addressNList);
+    let description = core.ethDescribePath(addressNList);
     if (!description.isKnown) {
       return undefined;
     }

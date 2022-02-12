@@ -91,16 +91,11 @@ export class LedgerHDWalletInfo implements core.HDWalletInfo, core.BTCWalletInfo
   }
 
   public describePath(msg: core.DescribePath): core.PathDescription {
-    switch (msg.coin) {
-      case "Ethereum":
-        return core.describeETHPath(msg.path, core.ETHAddressDerivationScheme.Ledger);
-      default:
-        return core.describeUTXOPath(msg.path, msg.coin, msg.scriptType);
-    }
+    return core.describePath(msg, core.ETHAddressDerivationScheme.Ledger);
   }
 
   public btcNextAccountPath(msg: core.BTCAccountPath): core.BTCAccountPath | undefined {
-    let description = core.describeUTXOPath(msg.addressNList, msg.coin, msg.scriptType);
+    let description = core.btcDescribePath(msg.addressNList, msg.coin, msg.scriptType);
     if (!description.isKnown) {
       return undefined;
     }
@@ -124,7 +119,7 @@ export class LedgerHDWalletInfo implements core.HDWalletInfo, core.BTCWalletInfo
 
   public ethNextAccountPath(msg: core.ETHAccountPath): core.ETHAccountPath | undefined {
     let addressNList = msg.hardenedPath.concat(msg.relPath);
-    let description = core.describeETHPath(addressNList, core.ETHAddressDerivationScheme.Ledger)
+    let description = core.ethDescribePath(addressNList, core.ETHAddressDerivationScheme.Ledger)
     if (!description.isKnown) {
       return undefined;
     }

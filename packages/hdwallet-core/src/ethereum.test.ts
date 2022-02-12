@@ -1,9 +1,9 @@
 import { bip32ToAddressNList } from ".";
-import { describeETHPath, ETHAddressDerivationScheme } from "./ethereum";
+import { ETHAddressDerivationScheme, ethDescribePath } from "./ethereum";
 
-describe("describeETHPath", () => {
+describe("ethDescribePath", () => {
   it("works with BIP44 derivation", async () => {
-    const test = (x: string) => describeETHPath(bip32ToAddressNList(x), ETHAddressDerivationScheme.BIP44).verbose;
+    const test = (x: string) => ethDescribePath(bip32ToAddressNList(x), ETHAddressDerivationScheme.BIP44).verbose;
 
     expect(test("m/1/2/3")).toMatchInlineSnapshot(`"m/1/2/3"`);
     expect(test("m/44'/123")).toMatchInlineSnapshot(`"m/44'/123"`);
@@ -34,7 +34,7 @@ describe("describeETHPath", () => {
   });
 
   it("works with Metamask derivation", async () => {
-    const test = (x: string) => describeETHPath(bip32ToAddressNList(x), ETHAddressDerivationScheme.Metamask).verbose;
+    const test = (x: string) => ethDescribePath(bip32ToAddressNList(x), ETHAddressDerivationScheme.Metamask).verbose;
 
     expect(test("m/1/2/3")).toMatchInlineSnapshot(`"m/1/2/3"`);
     expect(test("m/44'/123")).toMatchInlineSnapshot(`"m/44'/123"`);
@@ -65,7 +65,7 @@ describe("describeETHPath", () => {
   });
 
   it("works with OldLedger derivation", async () => {
-    const test = (x: string) => describeETHPath(bip32ToAddressNList(x), ETHAddressDerivationScheme.OldLedger).verbose;
+    const test = (x: string) => ethDescribePath(bip32ToAddressNList(x), ETHAddressDerivationScheme.OldLedger).verbose;
 
     expect(test("m/1/2/3")).toMatchInlineSnapshot(`"m/1/2/3"`);
     expect(test("m/44'/123")).toMatchInlineSnapshot(`"m/44'/123"`);
@@ -96,7 +96,7 @@ describe("describeETHPath", () => {
   });
 
   it("works with Ledger derivation", async () => {
-    const test = (x: string) => describeETHPath(bip32ToAddressNList(x), ETHAddressDerivationScheme.Ledger).verbose;
+    const test = (x: string) => ethDescribePath(bip32ToAddressNList(x), ETHAddressDerivationScheme.Ledger).verbose;
 
     expect(test("m/1/2/3")).toMatchInlineSnapshot(`"m/1/2/3"`);
     expect(test("m/44'/123")).toMatchInlineSnapshot(`"m/44'/123"`);
