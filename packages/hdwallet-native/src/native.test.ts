@@ -77,7 +77,7 @@ describe("NativeHDWalletInfo", () => {
       },
       {
         msg: { coin: "rune", path: [44 + 0x80000000, 931 + 0x80000000, 0 + 0x80000000, 0, 0] },
-        out: { coin: "Thorchain", verbose: "Thorchain Account #0", isKnown: true },
+        out: { coin: "Rune", verbose: "THORChain Account #0", isKnown: true },
       },
       {
         msg: { coin: "secret", path: [44 + 0x80000000, 529 + 0x80000000, 0 + 0x80000000, 0, 0] },
