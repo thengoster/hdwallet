@@ -404,12 +404,17 @@ export function selfTest(get: () => core.HDWallet): void {
         coin: "BitcoinCash",
         scriptType: core.BTCInputScriptType.SpendAddress,
       })
-    ).toEqual({
-      verbose: "m/44'/0'/7'/1/5",
-      coin: "BitcoinCash",
-      scriptType: core.BTCInputScriptType.SpendAddress,
-      isKnown: false,
-    });
+      ).toEqual({
+        accountIdx: 7,
+        addressIdx: 5,
+        verbose: "BitcoinCash Account #7, Change Address #5 (Prefork)",
+        coin: "BitcoinCash",
+        scriptType: core.BTCInputScriptType.SpendAddress,
+        isChange: true,
+        isKnown: true,
+        isPrefork: true,
+        wholeAccount: false,
+      });
 
     expect(
       wallet.info.describePath({
