@@ -10,8 +10,9 @@ export function createInfo(): core.HDWalletInfo {
 }
 
 export async function createWallet(): Promise<core.HDWallet> {
-  const wallet = new metamask.MetaMaskHDWallet();
-  await wallet.initialize();
+  const keyring = new core.Keyring();
+  const adapter = metamask.MetaMaskAdapter.useKeyring(keyring);
+  const wallet = await adapter.pairDevice()
   return wallet;
 }
 

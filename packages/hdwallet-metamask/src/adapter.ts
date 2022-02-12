@@ -35,7 +35,7 @@ export class MetaMaskAdapter {
       throw error;
     }
     const wallet = new MetaMaskHDWallet();
-    await wallet.initialize();
+    await wallet.initialize(provider);
     const deviceID = await wallet.getDeviceID();
     this.keyring.add(wallet, deviceID);
     this.currentDeviceID = deviceID;

@@ -1,7 +1,6 @@
 import * as core from "@shapeshiftoss/hdwallet-core";
 import * as eth from "./ethereum";
 import _ from "lodash";
-import detectEthereumProvider from "@metamask/detect-provider";
 
 class MetaMaskTransport extends core.Transport {
   public async getDeviceID() {
@@ -77,14 +76,11 @@ export class MetaMaskHDWallet implements core.HDWallet, core.ETHWallet {
     return Promise.resolve("MetaMask");
   }
 
-  public async initialize(): Promise<any> {
-    try {
-      this.provider = await detectEthereumProvider({ mustBeMetaMask: true, silent: false, timeout: 3000 });
-    } catch (e) {
-      console.error(e);
-    }
-
-    return Promise.resolve();
+  public initialize(): never;
+  public initialize(provider: unknown): Promise<any>;
+  public async initialize(provider?: unknown): Promise<any> {
+    if (!provider) throw new Error("provider is required");
+    this.provider = provider;
   }
 
   public hasOnDevicePinEntry(): boolean {
