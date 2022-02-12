@@ -450,7 +450,7 @@ export function selfTest(get: () => core.HDWallet): void {
         coin: "Ethereum",
       })
     ).toEqual({
-      verbose: "Ethereum Account #42",
+      verbose: "Ethereum Account #42 (Legacy)",
       coin: "Ethereum",
       isKnown: true,
       wholeAccount: true,

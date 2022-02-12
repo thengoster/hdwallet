@@ -19,37 +19,6 @@ export function isKeepKey(wallet: core.HDWallet): wallet is KeepKeyHDWallet {
   return _.isObject(wallet) && (wallet as any)._isKeepKey;
 }
 
-function describeETHPath(path: core.BIP32Path): core.PathDescription {
-  let pathStr = core.addressNListToBIP32(path);
-  let unknown: core.PathDescription = {
-    verbose: pathStr,
-    coin: "Ethereum",
-    isKnown: false,
-  };
-
-  if (path.length != 5) return unknown;
-
-  if (path[0] != 0x80000000 + 44) return unknown;
-
-  if (path[1] != 0x80000000 + core.slip44ByCoin("Ethereum")) return unknown;
-
-  if ((path[2] & 0x80000000) >>> 0 !== 0x80000000) return unknown;
-
-  if (path[3] != 0) return unknown;
-
-  if (path[4] != 0) return unknown;
-
-  let index = path[2] & 0x7fffffff;
-  return {
-    verbose: `Ethereum Account #${index}`,
-    accountIdx: index,
-    wholeAccount: true,
-    coin: "Ethereum",
-    isKnown: true,
-    isPrefork: false,
-  };
-}
-
 function describeCosmosPath(path: core.BIP32Path): core.PathDescription {
   let pathStr = core.addressNListToBIP32(path);
   let unknown: core.PathDescription = {
@@ -363,7 +332,7 @@ export class KeepKeyHDWalletInfo
   public describePath(msg: core.DescribePath): core.PathDescription {
     switch (msg.coin) {
       case "Ethereum":
-        return describeETHPath(msg.path);
+        return core.describeETHPath(msg.path);
       case "Atom":
         return describeCosmosPath(msg.path);
       case "Binance":
@@ -402,7 +371,7 @@ export class KeepKeyHDWalletInfo
 
   public ethNextAccountPath(msg: core.ETHAccountPath): core.ETHAccountPath | undefined {
     let addressNList = msg.hardenedPath.concat(msg.relPath);
-    let description = describeETHPath(addressNList);
+    let description = core.describeETHPath(addressNList);
     if (!description.isKnown) {
       return undefined;
     }

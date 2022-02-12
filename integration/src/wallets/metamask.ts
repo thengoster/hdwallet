@@ -90,6 +90,7 @@ export function selfTest(get: () => core.HDWallet): void {
       verbose: "Ethereum Account #0",
       coin: "Ethereum",
       isKnown: true,
+      isPrefork: false,
       accountIdx: 0,
       wholeAccount: true,
     });
@@ -103,6 +104,7 @@ export function selfTest(get: () => core.HDWallet): void {
       verbose: "Ethereum Account #3",
       coin: "Ethereum",
       isKnown: true,
+      isPrefork: false,
       accountIdx: 3,
       wholeAccount: true,
     });
