@@ -297,7 +297,7 @@ export class MetaMaskHDWalletInfo implements core.HDWalletInfo, core.ETHWalletIn
   }
 
   public describePath(msg: core.DescribePath): core.PathDescription {
-    return core.describePath(msg);
+    return core.describePath(msg, core.ETHAddressDerivationScheme.Metamask);
   }
 
   public ethNextAccountPath(msg: core.ETHAccountPath): core.ETHAccountPath | undefined {
